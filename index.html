@@ -1,150 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Express JS Blockchain</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.5.0/web3.min.js"
-      integrity="sha512-FhAl50BpK3gf9K//lbAWek9EEQEtGQyyXZNc1fuwcC2tVf2cskiJBcumXY0zJksYtms6S5cqubp1MNfUYTkO2A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-  </head>
-  <body>
-    <div class="container my-5">
-      <h2>Hello DEV!</h2>
-      <hr />
 
-      <button class="btn btn-primary" onclick="connectMetaMask()">
-        CONNECT METAMASK
-      </button>
-      <div class="mt-3">
-        <p class="d-inline">Connection status:</p>
-        <p class="d-inline btn p-1 btn-danger" id="accountArea">
-          NOT CONNECTED TO METAMASK!
-        </p>
-      </div>
-      <hr />
-      
-      <button onclick="connectContract()" class="btn btn-primary">
-        CONNECT CONTRACT
-      </button>
-     
-      <div class="mt-3">
-        <p class="d-inline">Smart contract status:</p>
-        <p class="d-inline btn p-1 btn-danger" id="contractArea">
-          NOT CONNECTED TO METAMASK!
-        </p>
-      <hr />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Express JS Blockchain</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.5.0/web3.min.js"
+    integrity="sha512-FhAl50BpK3gf9K//lbAWek9EEQEtGQyyXZNc1fuwcC2tVf2cskiJBcumXY0zJksYtms6S5cqubp1MNfUYTkO2A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
 
-      <button onclick="readContract()" class="btn btn-primary">
-        READ CONTRACT
-      </button>
-      <div class="mt-3">
-        <p class="d-inline">Data in smart contract:</p>
-        <p class="d-inline btn p-1 btn-danger" id="readArea">
-            NO DATA IN SMART CONTRACT!
-        </p>
-      </div>
-      <hr />
+<body>
+  <div class="container my-5">
+    <h2>
+      ROAD TO BLOCKCHAIN DEV! 🚀
+    </h2>
+    <hr />
 
-      <input
-        type="text"
-        id="inputArea"
-        class="form-control mb-3"
-        placeholder="Input new name"
-      />
-      <button onclick="changeContract()" class="btn btn-primary">
-        CHANGE CONTRACT
-      </button>
+    <button class="btn btn-primary" onclick="connectMetaMask()">
+      CONNECT METAMASK
+    </button>
+    <div class="mt-3">
+      <p class="d-inline">Connection status:</p>
+      <p class="d-inline btn p-1 btn-danger" id="accountArea">
+        NOT CONNECTED TO METAMASK!
+      </p>
+    </div>
+    <hr />
+
+    <button onclick="connectContract()" class="btn btn-primary">
+      CONNECT CONTRACT
+    </button>
+
+    <div class="mt-3">
+      <p class="d-inline">Smart contract status:</p>
+      <p class="d-inline btn p-1 btn-danger" id="contractArea">
+        NOT CONNECTED TO METAMASK!
+      </p>
       <hr />
     </div>
+    <button onclick="getAllData()" class="btn btn-primary">
+      READ CONTRACT
+    </button>
+    <div class="mt-3">
+      <p class="d-inline">Data in smart contract:</p>
+      <p class="d-inline btn p-1 btn-danger" id="allDataArea">
+        NO DATA IN SMART CONTRACT!
+      </p>
+    </div>
+    <hr />
 
-    <script>
-      // connect metamask
-      let accountGlobVariable;
-      const connectMetaMask = async () => {
-        if (window.ethereum !== "undefined") {
-          const accounts = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          accountGlobVariable = accounts[0];
-          document.getElementById("accountArea").innerHTML =
-            "Connected to " + accountGlobVariable;
-          document.getElementById("accountArea").classList.remove("btn-danger");
-          document.getElementById("accountArea").classList.add("btn-success");
-        }
-      };
+    <!-- form create product -->
+    <div class="card w-full">
+      <div class="card-header">
+        Add Product
+      </div>
+      <div class="card-body">
+        <form id="addProductForm">
+          <div class="mb-3">
+            <label for="productName" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="productName" placeholder="Enter product name" required>
+          </div>
+          <div class="mb-3">
+            <label for="productDescription" class="form-label">Product Description</label>
+            <textarea class="form-control" id="productDescription" rows="3" placeholder="Enter product description"
+              required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="productPrice" class="form-label">Product Price</label>
+            <input type="number" class="form-control" id="productPrice" placeholder="Enter product price" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
 
-      // connect contract
-      const connectContract = async () => {
-        // ABI of the contract deployed on the blockchain
-        const ABI = [
-          {
-            inputs: [
-              {
-                internalType: "string",
-                name: "_name",
-                type: "string",
-              },
-            ],
-            name: "changeName",
-            outputs: [],
-            stateMutability: "nonpayable",
-            type: "function",
-          },
-          {
-            inputs: [],
-            name: "getName",
-            outputs: [
-              {
-                internalType: "string",
-                name: "",
-                type: "string",
-              },
-            ],
-            stateMutability: "view",
-            type: "function",
-          },
-        ];
-        // address of the contract deployed on the blockchain
-        const Address = "0x7C7DB3D49811CBa75672b4f3777A65BAAe77c2Ce";
-        window.web3 = await new Web3(window.ethereum);
-        window.contract = await new web3.eth.Contract(ABI, Address);
-        document.getElementById("contractArea").innerHTML =
-          "Connected to contract: " + Address;
-        document.getElementById("contractArea").classList.remove("btn-danger");
-        document.getElementById("contractArea").classList.add("btn-success");
-      };
+    <hr />
 
-      // read contract
-      const readContract = async () => {
-        const data = await window.contract.methods.getName().call();
-        document.getElementById("readArea").innerHTML = data;
-        document.getElementById("readArea").classList.remove("btn-danger");
-        document.getElementById("readArea").classList.add("btn-success");
+    <p class="d-inline btn p-1 btn-danger mb-3" id="productByIdArea">
+      NO PRODUCT FOUND!
+    </p>
+    <input type="text" id="inputIdArea" class="form-control mb-3" placeholder="Input new name" />
+    <button onclick="getProductById()" class="btn btn-primary">
+      GET DATA
+    </button>
+    <hr />
+  </div>
+
+  <script>
+    // connect metamask
+    let accountGlobVariable;
+    const connectMetaMask = async () => {
+      if (window.ethereum !== "undefined") {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        accountGlobVariable = accounts[0];
+        document.getElementById("accountArea").innerHTML =
+          "Connected to " + accountGlobVariable;
+        document.getElementById("accountArea").classList.remove("btn-danger");
+        document.getElementById("accountArea").classList.add("btn-success");
+      }
     };
 
-      // change data in contract
-      const changeContract = async () => {
-        const newName = document.getElementById("inputArea").value;
-        await window.contract.methods.changeName(newName).send({
-          from: accountGlobVariable,
+    // connect contract
+    const connectContract = async () => {
+      // ABI of the contract deployed on the blockchain
+      const ABI = [{
+          "inputs": [{
+              "internalType": "string",
+              "name": "_name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_description",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_price",
+              "type": "uint256"
+            }
+          ],
+          "name": "addProduct",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "anonymous": false,
+          "inputs": [{
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "productId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            }
+          ],
+          "name": "ProductAdded",
+          "type": "event"
+        },
+        {
+          "inputs": [],
+          "name": "contractOwner",
+          "outputs": [{
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getAllProducts",
+          "outputs": [{
+            "components": [{
+                "internalType": "uint256",
+                "name": "productId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "description",
+                "type": "string"
+              },
+              {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct TestProductRegistry.Product[]",
+            "name": "",
+            "type": "tuple[]"
+          }],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [{
+            "internalType": "uint256",
+            "name": "_productId",
+            "type": "uint256"
+          }],
+          "name": "getProduct",
+          "outputs": [{
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "productOwner",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "productCount",
+          "outputs": [{
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [{
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }],
+          "name": "products",
+          "outputs": [{
+              "internalType": "uint256",
+              "name": "productId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "price",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ]
+      // address of the contract deployed on the blockchain
+      const Address = "0xF2673Ee619489aEE7477f0AC0A51893141937db4";
+      window.web3 = await new Web3(window.ethereum);
+      window.contract = await new web3.eth.Contract(ABI, Address);
+      document.getElementById("contractArea").innerHTML =
+        "Connected to contract: " + Address;
+      document.getElementById("contractArea").classList.remove("btn-danger");
+      document.getElementById("contractArea").classList.add("btn-success");
+    };
+
+    // get all data from contract
+    const getAllData = async () => {
+      const data = await window.contract.methods.getAllProducts().call();
+      console.log(data);
+      let html = "<table class='table'>";
+      html +=
+        "<thead><tr><th>Product ID</th><th>Name</th><th>Description</th><th>Price</th><th>Owner</th></tr></thead>";
+      html += "<tbody>";
+      data.forEach(item => {
+        html += "<tr><td>" + item.productId + "</td><td>" + item.name + "</td><td>" + item.description +
+          "</td><td>" + item.price +
+          "</td><td>" + item.owner + "</td></tr>";
+      });
+      html += "</tbody></table>";
+      document.getElementById("allDataArea").innerHTML = html;
+      document.getElementById("allDataArea").classList.remove("btn-danger");
+      // document.getElementById("allDataArea").classList.add("btn-success");
+    };
+
+    // change data in contract
+    const getProductById = async () => {
+      const searchId = document.getElementById("inputIdArea").value;
+      data = await window.contract.methods.getProduct(searchId).call();
+      console.log(data);
+      // document.getElementById("inputIdArea")
+      html = "<table class='table'>";
+      html +=
+        "<thead><tr><th>Product ID</th><th>Name</th><th>Description</th><th>Price</th><th>Owner</th></tr></thead>";
+      html += "<tbody>";
+      html += "<tr><td>" + searchId + "</td><td>" + data.name + "</td><td>" + data.description + "</td><td>" + data
+        .price +
+        "</td><td>" + data.productOwner + "</td></tr>";
+      html += "</tbody></table>";
+      document.getElementById("productByIdArea").innerHTML = html;
+      document.getElementById("productByIdArea").classList.remove("btn-danger");
+    };
+
+    // handle create product form
+    const addProductForm = document.getElementById("addProductForm");
+    addProductForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const productName = document.getElementById("productName").value;
+      const productDescription = document.getElementById("productDescription").value;
+      const productPrice = document.getElementById("productPrice").value;
+
+      try {
+        await window.contract.methods.addProduct(productName, productDescription, productPrice).send({
+          from: accountGlobVariable
         });
-        document.getElementById("inputArea").value = "";
-      };
-    </script>
-  </body>
+
+        addProductForm.reset();
+        alert("Product added successfully!");
+      } catch (error) {
+        console.error("Error adding product:", error);
+        alert("Failed to add product. Please try again.");
+      }
+    });
+  </script>
+</body>
+
 </html>
